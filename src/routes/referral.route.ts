@@ -54,9 +54,15 @@ async function addReferral(req: Request, res: Response) {
         console.log("--Email sent--");
 
         res.status(200).json({ success: true });
-    } catch (error) {
-        console.log({ error });
-        res.status(500).json({ error });
+    } catch (error: any) {
+        if (error.code === "P2002") {
+            // Handle unique constraint violation from prisma db (single user cant be referred multiple times)
+            res.status(400).json({
+                error: "This candidate has already been referred. Please use a different email.",
+            });
+            return;
+        }
+        res.status(500).json({ error: "Internal server error." });
     }
 }
 
