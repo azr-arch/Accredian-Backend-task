@@ -10,6 +10,7 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+const USER_EMAIL = process.env.USER_EMAIL;
 
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
@@ -31,7 +32,7 @@ export async function sendEmail({
             service: "gmail",
             auth: {
                 type: "OAuth2",
-                user: "dummyaccc023@gmail.com",
+                user: USER_EMAIL,
                 clientId: CLIENT_ID,
                 clientSecret: CLIENT_SECRET,
                 refreshToken: REFRESH_TOKEN,
@@ -40,18 +41,17 @@ export async function sendEmail({
         });
 
         const mailOption: MailOptions = {
-            from: "DUMMYACCC <dummyaccc023@gmail.com>",
+            from: `DUMMYACCC <${USER_EMAIL}>`,
             to: candidateEmail,
             subject: "You've been REFERRED",
-            // texnt: "Hey you just go reffered by ssomeone you know",
+            text: "Hey you just go reffered by someone you know",
             html: generateHtmlTemplate({
                 candidateName: candidateName,
                 referreName: refereeName,
             }),
         };
 
-        const result = await transport.sendMail(mailOption);
-        console.log({ result });
+        await transport.sendMail(mailOption);
     } catch (error) {
         console.log({ error });
     }
