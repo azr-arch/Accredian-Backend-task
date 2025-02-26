@@ -1,6 +1,4 @@
 
-## **2. Server App README**
-
 # Refer & Earn - Server App
 
 This is the backend application for the **Refer & Earn** platform, built with **Node.js**, **Express**, **Prisma**, and **TypeScript**. It handles referral submissions, stores data in a MySQL database, and sends email notifications.
